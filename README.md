@@ -15,7 +15,7 @@ The library is pretty straight-forward to use.
 
 ## connect at the module level
 
-```
+```python
 from cushion.persist import set_connection, CouchbaseConnection
 from cushion.model import Model, DocTypeMismatch, DocTypeNotFound
 from cushion.field import Field
@@ -26,7 +26,7 @@ set_connection(CouchbaseConnection('lvlrtest', 'localhost', 'gogogogo'))
 
 ## simple models
 
-```
+```python
 class SomeModel(Model):
   myfield = Field(default="shoes")
 ```
@@ -39,13 +39,13 @@ as needed.
 
 Models can be instantiated blankly:
 
-```
+```python
 some_one = SomeModel()
 ```
 
 Or, models can be instantiated with values as needed:
 
-```
+```python
 some_one = SomeModel(myfield="other value")
 ```
 
@@ -53,7 +53,7 @@ some_one = SomeModel(myfield="other value")
 
 Once you have a model, you can assign directly to the members.
 
-```
+```python
 some_one.myfield = "cool stuff"
 ```
 
@@ -62,14 +62,14 @@ some_one.myfield = "cool stuff"
 
 Persisting is easy.
 
-```
+```python
 some_one.save()
 ```
 
 Saves return the instance they have saved, so it's simple to chain
 instantiation and creation.
 
-```
+```python
 some_one = SomeModel(myfield="other value").save()
 ```
 
@@ -77,7 +77,7 @@ some_one = SomeModel(myfield="other value").save()
 
 Deleting is easy also.
 
-```
+```python
 some_one.delete()
 ```
 
@@ -85,14 +85,14 @@ some_one.delete()
 
 After a document is saved, it has an `id` field defined.
 
-```
+```python
 some_one = SomeModel().save()
 my_doc_id = some_one.id
 ```
 
 If you have the `id` you can retrieve that document directly.
 
-```
+```python
 original_one = SomeModel.load(my_doc_id)
 ```
 
@@ -103,7 +103,7 @@ examples are `TextField`, `FloatField`, etc.
 
 ## scalar fields
 
-```
+```python
 from cushion.field import DateTimeField, IntegerField, TextField
 
 class Pants(Model):
@@ -134,7 +134,7 @@ monday_attire = Outfit(last_worn=datetime.now(), pants=blue_pants).save()
 
 You can then access the referenced model simply:
 
-```
+```python
 print "My pants were {}".format( monday_attire.pants.color )
 ```
 
@@ -142,7 +142,7 @@ print "My pants were {}".format( monday_attire.pants.color )
 
 Collection fields are limited to basic python types only right now.
 
-```
+```python
 from cushion.field import ListField, DictField
 
 class AnotherThing(Model):
@@ -162,7 +162,7 @@ tt.my_dict['mykey'] = 'bigfoot'
 By defining a view, and then adding a helper method to your `Model`, you can
 simplify accessing the docs by params.
 
-```
+```python
 from cushion.view import View, sync_all
 
 class Shoe(Model):
