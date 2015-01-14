@@ -1,0 +1,186 @@
+
+# couch cushion
+
+Minimalist Couchbase object wrapper for python.
+
+- uses couchbase official driver
+- tested
+- fast
+- could be modified to work with other data persistence layers as needed with
+  minimal effort
+
+
+# Basic Usage
+
+The library is pretty straight-forward to use.
+
+## connect at the module level
+
+```
+from cushion.persist import set_connection, CouchbaseConnection
+from cushion.model import Model, DocTypeMismatch, DocTypeNotFound
+from cushion.field import Field
+
+# do this one time, before any db related work
+set_connection(CouchbaseConnection('lvlrtest', 'localhost', 'gogogogo'))
+```
+
+## simple models
+
+```
+class SomeModel(Model):
+  myfield = Field(default="shoes")
+```
+
+This model has one generic field with a default value that can be overwritten
+as needed.
+
+
+## instantiating
+
+Models can be instantiated blankly:
+
+```
+some_one = SomeModel()
+```
+
+Or, models can be instantiated with values as needed:
+
+```
+some_one = SomeModel(myfield="other value")
+```
+
+## manipulating
+
+Once you have a model, you can assign directly to the members.
+
+```
+some_one.myfield = "cool stuff"
+```
+
+
+## saving
+
+Persisting is easy.
+
+```
+some_one.save()
+```
+
+Saves return the instance they have saved, so it's simple to chain
+instantiation and creation.
+
+```
+some_one = SomeModel(myfield="other value").save()
+```
+
+## deleting
+
+Deleting is easy also.
+
+```
+some_one.delete()
+```
+
+## retrieving from persistence
+
+After a document is saved, it has an `id` field defined.
+
+```
+some_one = SomeModel().save()
+my_doc_id = some_one.id
+```
+
+If you have the `id` you can retrieve that document directly.
+
+```
+original_one = SomeModel.load(my_doc_id)
+```
+
+# Model Fields
+
+There are many field types that provide some validation and ease.  Some
+examples are `TextField`, `FloatField`, etc.
+
+## simple example
+
+```
+class Pants(Model):
+  size = IntegerField(default=32)
+  color = TextField(default="blue")
+  inspected_date = DateTimeField(default=datetime.now)
+```
+
+**todo** add more documentation on field types
+
+## Queries can be performed once a view is defined
+
+By defining a view, and then adding a helper method to your `Model`, you can
+simplify accessing the docs by params.
+
+```
+from cushion.view import View, sync_all
+
+class Shoe(Model):
+    size = IntegerField()
+    by_size = View(
+      'shoes', 'by_size',
+      '''
+      function(doc, meta) {
+        if (doc.type=='shoe') {
+          emit(doc.size, null)
+        }
+      }
+      ''' )
+
+    @classmethod
+    def all_for_size(cls, sz):
+      res = cls.by_size(startkey=sz, endkey=sz, include_docs=True)
+      return res
+
+
+# be sure to sync your views before using them
+sync_all(Shoe.viewlist())
+
+# now have a list of Shoe objects that are size 11
+size_11_shoes = Shoe.all_for_size(11)
+```
+
+
+# Tests
+
+**note** right now, tests require an active couchbase instance called
+"lvlrtest" with a SASL pass of *gogogogo*.  Sorry.
+
+To run tests, do the following:
+
+- ensure libcouchbase is installed
+- chdir to the cushion base directory: `cd cushion`
+- initiate a virtualenv: `mkdir .venv && virtualenv .venv`
+- activate the virtualenv: `source .venv/bin/activate`
+- install runtime requirements: `pip install -r requirements.txt`
+- install dev requirements: `pip install -r requirements_dev.txt`
+- finally, run the tests: `nosetests`
+
+```
+cushion$ nosetests
+............
+----------------------------------------------------------------------
+Ran 12 tests in 0.770s
+
+OK
+```
+
+# TODOS
+
+- Mock tests.  Right now, they require a couchbase instance
+- Unit tests - all functional for now, sorry.
+
+
+# THANKS to our forebears!
+
+Cushion is heavily inspired by [mogo](https://github.com/joshmarshall/mogo).
+
+We also learned a few lessons from
+[couchbase-mapping](https://github.com/hdmessaging/couchbase-mapping-python).
+
