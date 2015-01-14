@@ -9,7 +9,6 @@ Minimalist Couchbase object wrapper for python.
 - could be modified to work with other data persistence layers as needed with
   minimal effort
 
-
 # Basic Usage
 
 The library is pretty straight-forward to use.
@@ -102,14 +101,59 @@ original_one = SomeModel.load(my_doc_id)
 There are many field types that provide some validation and ease.  Some
 examples are `TextField`, `FloatField`, etc.
 
-## simple example
+## scalar fields
 
 ```
+from cushion.field import DateTimeField, IntegerField, TextField
+
 class Pants(Model):
   size = IntegerField(default=32)
   color = TextField(default="blue")
   inspected_date = DateTimeField(default=datetime.now)
 ```
+
+Notice the `default` parameter above for the `inspected_date` is not a scalar
+but a callable.  The function will be executed whtn the value is accessed the
+first time.
+
+
+## reference fields
+
+You can also reference another `Model` using a `RefField`.
+
+```python
+from cushion.field import RefField
+
+class Outfit(Model):
+    last_worn = DateTimeField()
+    pants = RefField(Pants)
+
+blue_pants = Pants().save()
+monday_attire = Outfit(last_worn=datetime.now(), pants=blue_pants).save()
+```
+
+You can then access the referenced model simply:
+
+```
+print "My pants were {}".format( monday_attire.pants.color )
+```
+
+## collection fields
+
+Collection fields are limited to basic python types only right now.
+
+```
+from cushion.field import ListField, DictField
+
+class AnotherThing(Model):
+    my_stuff = ListField()
+    my_dict = DictField()
+
+tt = AnotherThing()
+tt.my_stuff.append('this one time')
+tt.my_dict['mykey'] = 'bigfoot'
+```
+
 
 **todo** add more documentation on field types
 
