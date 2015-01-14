@@ -1,0 +1,8 @@
+*.pyc
+*.swp
+*.swo
+.coverage
+.venv
+build/
+dist/
+MANIFEST
