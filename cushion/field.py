@@ -88,6 +88,12 @@ class TextField(Field):
         return self._get_value(instance) or ''
 
 
+class BooleanField(Field):
+
+    def __init__(self, **ka):
+        super(BooleanField, self).__init__(loader=bool)
+
+
 class FloatField(Field):
 
     def __init__(self, default=None):

@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 
 from ..cushion.model import Model, DocTypeMismatch, DocTypeNotFound
 from ..cushion.field import (
-    Field, TextField, IntegerField, FloatField, RefField, DateTimeField,
-    ListField, DictField
+    Field, BooleanField, TextField, IntegerField, FloatField, RefField,
+    DateTimeField, ListField, DictField
     )
 from ..cushion.persist import set_connection, CouchbaseConnection
 
@@ -21,6 +21,7 @@ class Something(Model):
     d = DateTimeField(default=datetime.utcnow)
     ll = ListField()
     dd = DictField()
+    b = BooleanField()
 
 
 class Outter(Model):
@@ -38,6 +39,14 @@ class TestField(unittest.TestCase):
         s.somestr = 'asdf'
         with self.assertRaises(Exception):
             s.twentythree = 'hexagonal alley'
+
+    def test_boolean_field(self):
+        s = Something()
+        assert not s.b, "not false by default?"
+        s.b = True
+        s.save()
+        s0 = Something.load(s.id)
+        assert s0.b, "why not true?"
 
     def test_integer_field(self):
         ss = Something(i=99)
