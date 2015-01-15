@@ -1,10 +1,11 @@
 import unittest
+from base64 import b64encode, b64decode
 from datetime import datetime, timedelta
 
 from ..cushion.model import Model, DocTypeMismatch, DocTypeNotFound
 from ..cushion.field import (
     Field, BooleanField, TextField, IntegerField, FloatField, RefField,
-    DateTimeField, ListField, DictField
+    DateTimeField, ListField, DictField, ByteField
     )
 from ..cushion.persist import set_connection, CouchbaseConnection
 
@@ -22,6 +23,7 @@ class Something(Model):
     ll = ListField()
     dd = DictField()
     b = BooleanField()
+    pic = ByteField()
 
 
 class Outter(Model):
@@ -39,6 +41,15 @@ class TestField(unittest.TestCase):
         s.somestr = 'asdf'
         with self.assertRaises(Exception):
             s.twentythree = 'hexagonal alley'
+
+    def test_byte_field(self):
+        s = Something()
+        sample = "SOME BINARY DATA I PROMISE"
+        s.pic = sample
+        s.save()
+        s0 = Something.load(s.id)
+        print "PIC  s0.pic", s0.pic, "s.pic", s.pic
+        assert s0.pic == s.pic
 
     def test_boolean_field(self):
         s = Something()

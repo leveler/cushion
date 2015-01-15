@@ -1,4 +1,5 @@
 
+from base64 import b64decode, b64encode
 
 from datetime import datetime
 import iso8601
@@ -86,6 +87,20 @@ class TextField(Field):
 
     def to_d(self, instance):
         return self._get_value(instance) or ''
+
+
+class ByteField(Field):
+
+    def _byte_loader(self, instr):
+        if instr.endswith('='):
+            return b64decode(instr)
+        return instr
+
+    def __init__(self, **kw):
+        super(ByteField, self).__init__(loader=self._byte_loader, **kw)
+
+    def to_d(self, instance):
+        return b64encode(self._get_value(instance) or '')
 
 
 class BooleanField(Field):
