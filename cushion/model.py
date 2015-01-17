@@ -80,7 +80,6 @@ class Model(object):
     def load(cls, docid):
         doc = Persist().get(docid)
         if not doc: raise DocNotFound
-        print "loading **doc:", doc
         return cls(**doc)
 
     @property
@@ -91,11 +90,9 @@ class Model(object):
     def save(self):
         data = {}
         for name in self.__fields.values():
-            print "NAME", name
             attr = getattr(self.__class__, name)
             data[name] = attr.to_d(self)
         data['type'] = self.type
-        print "SAVING", data
         key, cas = Persist().set(self.__id, data)
         if not self.__id:
             self.__id = key

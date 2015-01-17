@@ -59,6 +59,9 @@ class Field(object):
 class RefField(Field):
 
     def _doc_loader(self, value):
+        if not value:
+            # don't try to load nothing
+            return
         if isinstance(value, basestring):
             # assume it's an id and try to load the model
             return self._cls.load(value)
@@ -74,6 +77,7 @@ class RefField(Field):
 
     def to_d(self, instance):
         val = self._get_value(instance)
+        if not val: return ''
         if val and not val.id:
             # not saved yet, recursively do this
             val.save()
