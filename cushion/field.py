@@ -57,7 +57,7 @@ class Field(object):
 
 
 class RefField(Field):
-    
+
     def _doc_loader(self, value):
         if isinstance(value, basestring):
             # assume it's an id and try to load the model
@@ -69,12 +69,12 @@ class RefField(Field):
     def __init__(self, cls):
         self._cls = cls
         assert hasattr(cls, 'load') # ensure .load exists, Models have it
-        # overload the loader 
+        # overload the loader
         super(RefField, self).__init__(loader=self._doc_loader)
 
     def to_d(self, instance):
         val = self._get_value(instance)
-        if not val.id:
+        if val and not val.id:
             # not saved yet, recursively do this
             val.save()
         return val.id
