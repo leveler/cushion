@@ -32,7 +32,8 @@ class View(object):
             else:
                 ret.append( r.doc or r )
         return ret
-            
+
+
 
 def sync_all(list_of_views):
     """
