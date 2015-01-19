@@ -21,6 +21,7 @@ class View(object):
         return self
 
     def __call__(self, wrapper=None, **kw):
+        print "CALLING VIEW", self.design, self.name, kw
         result = Persist().query(self.design, self.name, **kw)
         if not result: return
         wr_ = wrapper or self._wrapper

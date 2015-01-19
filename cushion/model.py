@@ -80,7 +80,7 @@ class Model(object):
     def load(cls, docid):
         doc = Persist().get(docid)
         if not doc: raise DocNotFound
-        return cls(**doc)
+        return cls(_id=docid, **doc)
 
     @property
     def _fields(self):
