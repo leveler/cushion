@@ -46,7 +46,7 @@ class CouchbaseConnection(BaseConnection):
     def delete(self, key):
         return self._cb.delete(key)
 
-    def query(self, design, name, **kw): 
+    def query(self, design, name, **kw):
         return self._cb.query(design, name, **kw)
 
     def design_view_create(self, design, views, syncwait=5):

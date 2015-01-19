@@ -27,7 +27,6 @@ class View(object):
         ret = []
         for r in result:
             if wr_ and result.include_docs:
-                print "R.DOC.VALUE", r.doc.value
                 ret.append( wr_(_id=r.doc.key, **r.doc.value) )
             else:
                 ret.append( r.doc or r )
