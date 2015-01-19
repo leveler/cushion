@@ -33,7 +33,7 @@ class TestModel(unittest.TestCase):
 
     def test_load(self):
         f = FakeModel().save()
-        print "fake.id", f.id
-        assert FakeModel.load(f.id)
+        f2 = FakeModel.load(f.id)
+        assert f.id == f2.id
 
 
