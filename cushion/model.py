@@ -80,7 +80,10 @@ class Model(object):
     def load(cls, docid):
         doc = Persist().get(docid)
         if not doc: raise DocNotFound
-        return cls(_id=docid, **doc)
+        # only load fields with non None values
+        return cls(
+            _id=docid,
+            **{k:v for k,v in doc.iteritems() if v is not None} )
 
     @property
     def _fields(self):
@@ -107,7 +110,6 @@ class Model(object):
             if isinstance(attr, View):
                 views.append(attr)
         return views
-        
 
 
 

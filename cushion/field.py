@@ -33,7 +33,7 @@ class Field(object):
         if field_name in instance._data:
             return instance._data.get(field_name)
         default = self._default
-        if default:
+        if default is not None:
             default_val = default() if callable(default) else default
             if self._loader:
                 instance._data[field_name] = self._loader(default_val)
