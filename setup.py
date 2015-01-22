@@ -15,7 +15,7 @@ from distutils.core import setup
 
 setup(
     name='cushion',
-    version='0.0.3',
+    version='0.0.4',
     description='Simple Couchbase object wrapper',
     author='Jeremy Kelley',
     author_email='jeremy@33ad.org',
