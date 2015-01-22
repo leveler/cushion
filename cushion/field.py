@@ -12,7 +12,7 @@ class Field(object):
         initializes this field.
 
         loader - optional function that can do any initialization and
-                 validation necessary to ensure the value is properly 
+                 validation necessary to ensure the value is properly
                  loaded in the field
         default - optional scalar or callable to initialize the value
         """
@@ -94,13 +94,13 @@ class TextField(Field):
 
 
 class ByteField(Field):
+    """
+    Loads b64encoded data from the database.
+    Must be assigned b64 data when created.
+    """
 
     def _byte_loader(self, instr):
-        try:
-            return b64decode(instr)
-        except TypeError:
-            # probably already binary... we hope... XXX
-            return instr
+        return b64decode(instr)
 
     def __init__(self, **kw):
         super(ByteField, self).__init__(loader=self._byte_loader, **kw)
@@ -186,7 +186,7 @@ class DateTimeField(Field):
         raise ValueError('date must be iso8601 or datetime object')
 
     def __init__(self, **kw):
-        super(DateTimeField, self).__init__(loader=self._load_date, **kw), 
+        super(DateTimeField, self).__init__(loader=self._load_date, **kw)
 
     def to_d(self, instance):
         val = self._get_value(instance)
