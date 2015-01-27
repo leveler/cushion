@@ -67,6 +67,9 @@ class Model(object):
         for k,v in kw.iteritems():
             setattr(self, k, v)
 
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.id == other.id
+
     @classmethod
     def _update_fields(cls):
         cls.__fields = {}

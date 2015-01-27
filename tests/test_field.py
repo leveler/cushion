@@ -44,11 +44,10 @@ class TestField(unittest.TestCase):
 
     def test_byte_field(self):
         s = Something()
-        sample = "SOME BINARY DATA I PROMISE"
+        sample = b64encode("SOME BINARY DATA I PROMISE")
         s.pic = sample
         s.save()
         s0 = Something.load(s.id)
-        print "PIC  s0.pic", s0.pic, "s.pic", s.pic
         assert s0.pic == s.pic
 
     def test_boolean_field(self):

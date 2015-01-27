@@ -36,4 +36,10 @@ class TestModel(unittest.TestCase):
         f2 = FakeModel.load(f.id)
         assert f.id == f2.id
 
+    def test_eq(self):
+        e1 = FakeModel().save()
+        e2 = FakeModel.load(e1.id)
+        e3 = FakeModel().save()
+        assert e1 == e2, "not equal"
+        assert not e1 == e3, "equal but shouldn't be"
 
