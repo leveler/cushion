@@ -134,3 +134,8 @@ def set_connection(conn):
     ActiveConnection = conn
 
 
+def get_connection():
+    global ActiveConnection
+    return ActiveConnection
+
+
