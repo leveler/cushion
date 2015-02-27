@@ -58,7 +58,7 @@ class CouchbaseConnection(BaseConnection):
             self._wout.write("db.delete({})\n".format(dumps(key)))
         return self._cb.delete(key)
 
-    def query(self, design, name, **kw): 
+    def query(self, design, name, **kw):
         if self._wout:
             params = [ "{}='{}'".format(k,v) for k,v in kw.iteritems() ]
             self._wout.write("db.query({}, {}, {})\n".format(

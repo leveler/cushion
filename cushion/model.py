@@ -105,6 +105,9 @@ class Model(object):
         self.__cas = cas
         return self
 
+    def delete(self):
+        return Persist().delete(self.__id)
+
     @classmethod
     def viewlist(cls):
         views = []
