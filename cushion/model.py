@@ -4,9 +4,6 @@ from .persist import Persist
 from .view import View
 
 
-class DocNotFound(Exception):
-    """ Raised when document did not exist but tried to load """
-
 
 class DocTypeMismatch(Exception):
     """ Raised when document tries to instantiate from other doc type """
@@ -82,7 +79,7 @@ class Model(object):
     @classmethod
     def load(cls, docid):
         doc = Persist().get(docid)
-        if not doc: raise DocNotFound
+        if not doc: return None
         # only load fields with non None values
         return cls(
             _id=docid,

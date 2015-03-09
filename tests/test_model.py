@@ -31,6 +31,9 @@ class TestModel(unittest.TestCase):
         f = FakeModel()
         f.save()
 
+    def test_load_fail(self);
+        assert None == FakeModel.load('nope')
+
     def test_load(self):
         f = FakeModel().save()
         f2 = FakeModel.load(f.id)
