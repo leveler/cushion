@@ -113,7 +113,7 @@ class Pants(Model):
 ```
 
 Notice the `default` parameter above for the `inspected_date` is not a scalar
-but a callable.  The function will be executed whtn the value is accessed the
+but a callable.  The function will be executed when the value is accessed the
 first time.
 
 
