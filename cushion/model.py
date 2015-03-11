@@ -45,6 +45,10 @@ class Model(object):
     def id(self):
         return self.__id
 
+    @id.setter
+    def id(self, value):
+        self.__id = value
+
     @property
     def type(self):
         return self.__class__.__name__.lower()
