@@ -2,6 +2,7 @@
 from base64 import b64decode, b64encode
 
 from datetime import datetime
+from json import loads
 import iso8601
 
 
@@ -199,7 +200,7 @@ class DateTimeField(Field):
 
     def to_d(self, instance):
         val = self._get_value(instance)
-        return val.utcnow().isoformat() if val else ''
+        return val.isoformat() if val else ''
 
 
 
