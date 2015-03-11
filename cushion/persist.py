@@ -25,6 +25,82 @@ class BaseConnection(object):
     pass
 
 
+
+
+emitjs = '''
+var output_queue = {}
+var emit = function(key, val) {
+    if (output_queue[key]) {
+        output_queue[key].push(val)
+    } else {
+        output_queue[key] = [ val ]
+    }
+}
+'''
+
+class MemConnection(BaseConnection):
+
+    def __init__(self):
+        self.designs = {}
+        self.data = {}
+
+    def get(self, key):
+        return self.data.get(key, None)
+
+    def set(self, key, value):
+        self.data[key] = value
+
+    def delete(self, key):
+        del self.data[key]
+
+    def query(self, design, name, **kw):
+        # NO REDUCE YET
+        view_key = '/'.join((design, name))
+        if view_key not in self.designs:
+            raise Exception('view not found')
+        view = self.designs[view_key]
+        mapf_ctx = view.get('map')
+        redf_ctx = view.get('reduce')
+        for k,d in self.data.iteritems():
+            meta = {'_id': k}
+            doc = d
+            mapf_ctx.call('mapf', doc, meta)
+        map_results = mapf.eval("output_queue")
+        if kw.get('include_docs'):
+            ret = {}
+            for k in map_results.keys():
+                ret[k] = self.data[k]
+            return ret
+        else:
+            return map_results
+
+    def design_view_create(self, design, views, syncwait=5):
+        for v,d in views.iteritems():
+            mapf = execjs.compile(''' {} var mapf = {}'''.format(emitjs, d['map']))
+            view = dict(mapf=mapf)
+            if 'reduce' in d:
+                redf = execjs.compile('''var redf = {}'''.format(d['reduce']))
+                view['redf'] = redf
+            self.designs["/".join((design, v))] = view
+
+    def view_create(self, design, name, mapf, redf=None, syncwait=5):
+        doc = { 'views': { name : { 'map': mapf, 'reduce': redf } } }
+        self.design_view_create(design, doc)
+
+    def view_destroy(self, design):
+        prefix = design + "/"
+        for k in self.designs.keys():
+            if k.startswith(prefix):
+                del self.designs[k]
+
+
+
+
+
+
+
+
+
 class CouchbaseConnection(BaseConnection):
 
     def __init__(self, bucket, host=None, password=None, writeout=None):
