@@ -78,6 +78,10 @@ class Model(object):
 
     @classmethod
     def load(cls, docid):
+        if docid is None:
+            # shortcircuit load and just return None for matching doc if
+            # docid is None
+            return None
         doc = Persist().get(docid)
         if not doc: return None
         # only load fields with non None values
