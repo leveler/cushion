@@ -3,13 +3,13 @@ class InvalidConnectionType(Exception):
     """ Wrong type of connection object provided """
 
 
-class PersistanceNotConnected(Exception):
-    """ No active persistance connection set. Maybe call set_connection(...) """
+class PersistenceNotConnected(Exception):
+    """ No aceive persistence connection set. Maybe call set_connection(...) """
     pass
 
 
-class PersistanceError(Exception):
-    """ Error encountered during persistance of object """
+class PersistenceError(Exception):
+    """ Error encountered during persistence of object """
     pass
 
 

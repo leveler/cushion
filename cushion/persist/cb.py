@@ -36,7 +36,7 @@ class CouchbaseConnection(BaseConnection):
         result = self._cb.set(key, value)
         if result.success:
             return result.key, result.cas
-        raise PersistanceError()
+        raise PersistenceError()
 
     def delete(self, key):
         if self._wout:
