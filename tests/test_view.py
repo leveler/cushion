@@ -5,7 +5,8 @@ from ..cushion.model import Model, DocTypeMismatch, DocTypeNotFound
 from ..cushion.field import (
     Field, TextField, IntegerField, FloatField, RefField, DateTimeField
     )
-from ..cushion.persist import set_connection, MemConnection, Persist
+from ..cushion.persist import set_connection, Persist
+from ..cushion.persist.mem import MemConnection
 from ..cushion.view import View, sync_all
 
 

@@ -9,7 +9,9 @@ from ..cushion.field import (
     Field, BooleanField, TextField, IntegerField, FloatField, RefField,
     DateTimeField, ListField, DictField, ByteField
     )
-from ..cushion.persist import set_connection, MemConnection
+
+from ..cushion.persist import set_connection 
+from ..cushion.persist.mem import MemConnection
 
 
 set_connection(MemConnection())

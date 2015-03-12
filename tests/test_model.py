@@ -2,7 +2,9 @@ import unittest
 
 from ..cushion.model import Model, DocTypeMismatch, DocTypeNotFound
 from ..cushion.field import Field
-from ..cushion.persist import set_connection, MemConnection
+from ..cushion.persist import set_connection 
+from ..cushion.persist.mem import MemConnection
+
 
 
 mc = MemConnection()
