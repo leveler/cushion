@@ -22,5 +22,5 @@ setup(
     url="http://github.com/leveler/cushion/",
     license="http://www.apache.org/licenses/LICENSE-2.0",
     packages=['cushion', ],
-    install_requires=['couchbase', 'iso8601']
+    install_requires=['iso8601']
 )

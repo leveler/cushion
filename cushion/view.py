@@ -4,6 +4,7 @@ from collections import defaultdict
 
 from .persist import Persist
 
+MAXVAL = u'\u0fff' # useful for queries boundaries
 
 class View(object):
 
@@ -21,10 +22,10 @@ class View(object):
         return self
 
     def __call__(self, wrapper=None, **kw):
-        result = Persist().query(self.design, self.name, **kw)
-        if not result: return
-        wr_ = wrapper or self._wrapper
         ret = []
+        result = Persist().query(self.design, self.name, **kw)
+        if not result: return ret
+        wr_ = wrapper or self._wrapper
         for r in result:
             if wr_ and result.include_docs:
                 docd = r.doc.value
@@ -34,7 +35,6 @@ class View(object):
             else:
                 ret.append( r.doc or r )
         return ret
-
 
 
 def sync_all(list_of_views):

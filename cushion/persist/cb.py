@@ -5,27 +5,12 @@ from uuid import uuid4
 
 from couchbase import Couchbase
 
-ActiveConnection = None
-
-
-class InvalidConnectionType(Exception):
-    """ Wrong type of connection object provided """
-
-
-class PersistanceNotConnected(Exception):
-    """ No active persistance connection set. Maybe call set_connection(...) """
-    pass
-
-class PersistanceError(Exception):
-    """ Error encountered during persistance of object """
-    pass
-
-
-class BaseConnection(object):
-    pass
+from .base import BaseConnection
+from .exceptions import PersistenceError
 
 
 class CouchbaseConnection(BaseConnection):
+    """ connects to a couchbase server """
 
     def __init__(self, bucket, host=None, password=None, writeout=None):
         """
@@ -51,7 +36,7 @@ class CouchbaseConnection(BaseConnection):
         result = self._cb.set(key, value)
         if result.success:
             return result.key, result.cas
-        raise PersistanceError()
+        raise PersistenceError()
 
     def delete(self, key):
         if self._wout:
@@ -96,46 +81,4 @@ class CouchbaseConnection(BaseConnection):
         if self._wout:
             self._wout.write("db.design_delete({})\n".format(design))
         return self._cb.design_delete(design)
-
-
-class Persist(object):
-    """ proxy object for db related calls """
-
-    def __init__(self, *a, **kw):
-        if ActiveConnection is None:
-            raise InvalidConnectionType()
-
-    def get(self, docid):
-        return ActiveConnection.get(docid)
-
-    def set(self, docid, value):
-        return ActiveConnection.set(docid, value)
-
-    def delete(self, docid):
-        return ActiveConnection.delete(docid)
-
-    def query(self, *a, **kw):
-        return ActiveConnection.query(*a, **kw)
-
-    def view_create(self, *a, **kw):
-        return ActiveConnection.view_create(*a, **kw)
-
-    def view_destroy(self, *a, **kw):
-        return ActiveConnection.view_destroy(*a, **kw)
-
-    def design_view_create(self, *a, **kw):
-        return ActiveConnection.design_view_create(*a, **kw)
-
-
-def set_connection(conn):
-    global ActiveConnection
-    if not isinstance(conn, BaseConnection):
-        raise InvalidConnectionType()
-    ActiveConnection = conn
-
-
-def get_connection():
-    global ActiveConnection
-    return ActiveConnection
-
 

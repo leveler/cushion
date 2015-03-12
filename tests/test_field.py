@@ -2,15 +2,19 @@ import unittest
 from base64 import b64encode, b64decode
 from datetime import datetime, timedelta
 
+import execjs
+
 from ..cushion.model import Model, DocTypeMismatch, DocTypeNotFound
 from ..cushion.field import (
     Field, BooleanField, TextField, IntegerField, FloatField, RefField,
     DateTimeField, ListField, DictField, ByteField
     )
-from ..cushion.persist import set_connection, CouchbaseConnection
+
+from ..cushion.persist import set_connection 
+from ..cushion.persist.mem import MemConnection
 
 
-set_connection(CouchbaseConnection('lvlrtest', 'localhost', 'gogogogo'))
+set_connection(MemConnection())
 
 
 class Something(Model):

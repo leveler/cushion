@@ -85,8 +85,10 @@ class Model(object):
         doc = Persist().get(docid)
         if not doc: return None
         # only load fields with non None values
+        print "BUILDING DOC", doc
+        if '_id' not in doc:
+            doc['_id'] = docid
         return cls(
-            _id=docid,
             **{k:v for k,v in doc.iteritems() if v is not None} )
 
     @property

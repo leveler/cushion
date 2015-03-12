@@ -2,10 +2,13 @@ import unittest
 
 from ..cushion.model import Model, DocTypeMismatch, DocTypeNotFound
 from ..cushion.field import Field
-from ..cushion.persist import set_connection, CouchbaseConnection
+from ..cushion.persist import set_connection 
+from ..cushion.persist.mem import MemConnection
 
 
-set_connection(CouchbaseConnection('lvlrtest', 'localhost', 'gogogogo'))
+
+mc = MemConnection()
+set_connection(mc)
 
 
 class NoTypeModel(Model):

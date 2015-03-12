@@ -9,14 +9,23 @@ Minimalist Couchbase object wrapper for python.
 - could be modified to work with other data persistence layers as needed with
   minimal effort
 
+# note about needed libraries
+
+You will need to install libcouchbase and python couchbase external to this
+library.  They are not set as dependencies but will be considered to be
+satisfied externally if you intend to use the CouchbaseConnection.
+
 # Basic Usage
 
-The library is pretty straight-forward to use.
+Connect to a persistence layer, then work through your models.
 
 ## connect at the module level
 
+This favors convenience.
+
 ```python
-from cushion.persist import set_connection, CouchbaseConnection
+from cushion.persist import set_connection
+from cushion.persist.cb import CouchbaseConnection
 from cushion.model import Model, DocTypeMismatch, DocTypeNotFound
 from cushion.field import Field
 
@@ -33,7 +42,6 @@ class SomeModel(Model):
 
 This model has one generic field with a default value that can be overwritten
 as needed.
-
 
 ## instantiating
 
@@ -56,7 +64,6 @@ Once you have a model, you can assign directly to the members.
 ```python
 some_one.myfield = "cool stuff"
 ```
-
 
 ## saving
 
@@ -190,15 +197,23 @@ sync_all(Shoe.viewlist())
 size_11_shoes = Shoe.all_for_size(11)
 ```
 
+# MemConnection
+
+There is a mock connection type, called a `MemConnection`, that allows you to
+test your models w/o needing a live couchbase instance.
+
+To use it instead of the couchbase connection, just set your active connection
+to a MemConnection instance.
+
+```
+from cushion.persist.mem import MemConnection
+set_connection(MemConnection())
+```
 
 # Tests
 
-**note** right now, tests require an active couchbase instance called
-"lvlrtest" with a SASL pass of *gogogogo*.  Sorry.
-
 To run tests, do the following:
 
-- ensure libcouchbase is installed
 - chdir to the cushion base directory: `cd cushion`
 - initiate a virtualenv: `mkdir .venv && virtualenv .venv`
 - activate the virtualenv: `source .venv/bin/activate`
@@ -217,7 +232,6 @@ OK
 
 # TODOS
 
-- Mock tests.  Right now, they require a couchbase instance
 - Unit tests - all functional for now, sorry.
 
 
