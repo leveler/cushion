@@ -218,7 +218,7 @@ To run tests, do the following:
 - initiate a virtualenv: `mkdir .venv && virtualenv .venv`
 - activate the virtualenv: `source .venv/bin/activate`
 - install runtime requirements: `pip install -r requirements.txt`
-- install dev requirements: `pip install -r requirements_dev.txt`
+- install dev requirements: `pip install -r requirements_test.txt`
 - finally, run the tests: `nosetests`
 
 ```
