@@ -2,6 +2,7 @@
 from base64 import b64decode, b64encode
 
 from datetime import datetime
+from json import loads
 import iso8601
 
 
@@ -180,17 +181,26 @@ class DateTimeField(Field):
             return dt
         if isinstance(dt, basestring):
             try:
-                return iso8601.parse_date(dt)
+                if not self._naive:
+                    return iso8601.parse_date(dt)
+                else:
+                    # If dt is without a time zone then this will return a naive dt
+                    # else it will handle it like the above
+                    return iso8601.parse_date(dt, default_timezone=None)
             except iso8601.ParseError:
                 raise ValueError('invalid date format')
         raise ValueError('date must be iso8601 or datetime object')
 
     def __init__(self, **kw):
+        self._naive = False
+        if 'naive' in kw:
+            self._naive = kw['naive']
+            del kw['naive']
         super(DateTimeField, self).__init__(loader=self._load_date, **kw)
 
     def to_d(self, instance):
         val = self._get_value(instance)
-        return val.utcnow().isoformat() if val else ''
+        return val.isoformat() if val else ''
 
 
 

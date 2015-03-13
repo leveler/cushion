@@ -29,6 +29,8 @@ class Something(Model):
     b = BooleanField()
     pic = ByteField()
 
+class ModelWithNaiveDateTime(Model):
+    d = DateTimeField(default=datetime.utcnow(), naive=True)
 
 class Outter(Model):
     some = RefField(Something)
@@ -82,6 +84,14 @@ class TestField(unittest.TestCase):
         s = Something().save()
         assert s.d < datetime.utcnow(), "date bogus"
 
+    def test_datetime_field_is_naive(self):
+        s = ModelWithNaiveDateTime().save()
+        self.assertTrue(s.d.tzinfo == None)
+
+    def test_datetime_field_is_not_naive(self):
+        s = Something().save()
+        self.assertFalse(s.d.tzinfo != None)
+
     def test_listfield(self):
         s = Something()
         s.ll.append('feh')
@@ -97,5 +107,3 @@ class TestField(unittest.TestCase):
         assert len(s.dd)==1, "bogus len"
         s0 = Something.load(s.id)
         assert s.dd['feh'] == s0.dd['feh']
-
-
