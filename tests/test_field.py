@@ -10,7 +10,7 @@ from ..cushion.field import (
     DateTimeField, ListField, DictField, ByteField
     )
 
-from ..cushion.persist import set_connection 
+from ..cushion.persist import set_connection
 from ..cushion.persist.mem import MemConnection
 
 
@@ -29,8 +29,10 @@ class Something(Model):
     b = BooleanField()
     pic = ByteField()
 
+
 class ModelWithNaiveDateTime(Model):
     d = DateTimeField(default=datetime.utcnow(), naive=True)
+
 
 class Outter(Model):
     some = RefField(Something)
@@ -79,6 +81,8 @@ class TestField(unittest.TestCase):
         assert o.some.txt == 'good times'
         o2 = Outter.load(o.id)
         assert o2.some.txt == 'good times'
+        print o._raw_data
+        assert o2.rawval('some') == s.id
 
     def test_datetime_field(self):
         s = Something().save()

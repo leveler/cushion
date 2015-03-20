@@ -1,8 +1,8 @@
 import unittest
 
 from ..cushion.model import Model, DocTypeMismatch, DocTypeNotFound
-from ..cushion.field import Field
-from ..cushion.persist import set_connection 
+from ..cushion.field import Field, TextField
+from ..cushion.persist import set_connection
 from ..cushion.persist.mem import MemConnection
 
 
@@ -22,6 +22,7 @@ class FakeModel(Model):
 
     twentythree = Field(default=23)
     somestr = Field()
+    txt = TextField()
 
 
 class TestModel(unittest.TestCase):
@@ -48,4 +49,11 @@ class TestModel(unittest.TestCase):
         e3 = FakeModel().save()
         assert e1 == e2, "not equal"
         assert not e1 == e3, "equal but shouldn't be"
+
+    def test_raw(self):
+        f = FakeModel(txt=55).save()
+        self.assertEqual( 55, f.rawval('txt') )
+        self.assertEqual( '55', f.txt )
+
+
 

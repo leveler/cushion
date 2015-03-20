@@ -4,7 +4,6 @@ from .persist import Persist
 from .view import View
 
 
-
 class DocTypeMismatch(Exception):
     """ Raised when document tries to instantiate from other doc type """
 
@@ -33,7 +32,6 @@ class NewModelClass(type):
             cls._update_fields()
 
 
-
 class Model(object):
 
     __metaclass__ = NewModelClass
@@ -57,6 +55,7 @@ class Model(object):
         super(Model, self).__init__()
         self.__class__._update_fields()
         self._data = {}
+        self._raw_data = {}
         if 'type' in kw:
             # cleanup 'type' inbound
             if kw['type'] != self.type: raise DocTypeMismatch()
@@ -66,10 +65,14 @@ class Model(object):
             self.__id = kw['_id']
             del kw['_id']
         for k,v in kw.iteritems():
+            self._raw_data[k] = v
             setattr(self, k, v)
 
     def __eq__(self, other):
         return isinstance(other, self.__class__) and self.id == other.id
+
+    def rawval(self, k):
+        return self._raw_data.get(k)
 
     @classmethod
     def _update_fields(cls):
