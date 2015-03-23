@@ -76,6 +76,9 @@ class RefField(Field):
         if instance is None:
             # called at class, get the field
             return self
+        return self._get_value(instance)
+
+    def _get_value(self, instance):
         field_name = self._get_fieldname(instance)
         if field_name not in instance._data:
             if field_name in instance._raw_data:
@@ -111,7 +114,7 @@ class RefField(Field):
 
     def to_d(self, instance):
         field_name = self._get_fieldname(instance)
-        if field_name in instance._raw_data:
+        if field_name in instance._raw_data and instance._raw_data[field_name]:
             # the id should be cached here, return that
             return instance._raw_data[field_name]
         val = self._get_value(instance)
