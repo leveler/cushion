@@ -59,6 +59,39 @@ class Field(object):
 
 class RefField(Field):
 
+    def __set__(self, instance, value):
+        # we will override this completely to enable late binding/loading of
+        # ref'd objects
+        print "assigning to ref value=", value
+        field_name = self._get_fieldname(instance)
+        if isinstance(value, basestring):
+            # assume id
+            instance._raw_data[field_name] = value
+        elif isinstance(value, self._cls):
+            # given a model
+            instance._raw_data[field_name] = value.id
+            instance._data[field_name] = value
+
+    def __get__(self, instance, cls=None):
+        if instance is None:
+            # called at class, get the field
+            return self
+        field_name = self._get_fieldname(instance)
+        if field_name not in instance._data:
+            if field_name in instance._raw_data:
+                # not loaded, let's load it if we have id
+                doc = self._doc_loader(instance._raw_data[field_name])
+            else:
+                if self._default:
+                    default = self._default
+                    doc = default() if callable(default) else default
+                    doc = self._doc_loader(doc)
+                else:
+                    doc = None
+            # now let's save this value for the next time we want it
+            instance._data[field_name] = doc
+        return instance._data[field_name]
+
     def _doc_loader(self, value):
         if not value:
             # don't try to load nothing
@@ -67,20 +100,24 @@ class RefField(Field):
             # assume it's an id and try to load the model
             return self._cls.load(value)
         if isinstance(value, self._cls):
-            # we're one of those already, just save it
+            # we're one of those already, just return it
             return value
 
     def __init__(self, cls):
         self._cls = cls
         assert hasattr(cls, 'load') # ensure .load exists, Models have it
         # overload the loader
-        super(RefField, self).__init__(loader=self._doc_loader)
+        super(RefField, self).__init__()
 
     def to_d(self, instance):
+        field_name = self._get_fieldname(instance)
+        if field_name in instance._raw_data:
+            # the id should be cached here, return that
+            return instance._raw_data[field_name]
         val = self._get_value(instance)
         if not val: return ''
         if val and not val.id:
-            # not saved yet, recursively do this
+            # not saved yet, can't serialize?  save here.
             val.save()
         return val.id
 
