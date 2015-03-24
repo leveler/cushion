@@ -152,8 +152,8 @@ class ByteField(Field):
 
 class BooleanField(Field):
 
-    def __init__(self, **ka):
-        super(BooleanField, self).__init__(loader=bool)
+    def __init__(self, **kw):
+        super(BooleanField, self).__init__(loader=bool, **kw)
 
 
 class FloatField(Field):
@@ -241,7 +241,5 @@ class DateTimeField(Field):
     def to_d(self, instance):
         val = self._get_value(instance)
         return val.isoformat() if val else ''
-
-
 
 

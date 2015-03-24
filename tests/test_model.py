@@ -2,7 +2,7 @@ import unittest
 
 from ..cushion.model import Model, DocTypeMismatch, DocTypeNotFound
 from ..cushion.field import Field, TextField
-from ..cushion.persist import set_connection
+from ..cushion.persist import set_connection, get_connection
 from ..cushion.persist.mem import MemConnection
 
 
@@ -16,6 +16,7 @@ class NoTypeModel(Model):
 
 
 class FakeModel(Model):
+
     @property
     def type(self):
         return "fake"
@@ -23,6 +24,7 @@ class FakeModel(Model):
     twentythree = Field(default=23)
     somestr = Field()
     txt = TextField()
+    default_val = TextField(default='aaa')
 
 
 class TestModel(unittest.TestCase):
@@ -55,5 +57,8 @@ class TestModel(unittest.TestCase):
         self.assertEqual( 55, f.rawval('txt') )
         self.assertEqual( '55', f.txt )
 
-
+    def test_unassigned_default(self):
+        f = FakeModel().save()
+        d = get_connection().get(f.id)
+        self.assertEqual(d['default_val'], 'aaa')
 

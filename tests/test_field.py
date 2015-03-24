@@ -27,6 +27,7 @@ class Something(Model):
     ll = ListField()
     dd = DictField()
     b = BooleanField()
+    default_true = BooleanField(default=True)
     pic = ByteField()
 
 
@@ -65,6 +66,7 @@ class TestField(unittest.TestCase):
         s.save()
         s0 = Something.load(s.id)
         assert s0.b, "why not true?"
+        assert s0.default_true, "default true was not true"
 
     def test_integer_field(self):
         ss = Something(i=99)
