@@ -10,7 +10,7 @@ from .base import BaseConnection
 mapwrap = '''
 function map_wrapper(doc, meta, outq) {
     function emit(key, val) {
-        emit.outq.push([key, val, meta._id])
+        emit.outq.push([key, val, meta.id])
     }
     emit.outq = outq
     var mapf = %MAPF%
@@ -82,7 +82,7 @@ class MemConnection(BaseConnection):
         outq = []
         # each entry looks like  [key, val, _id]
         for k,d in self.data.iteritems():
-            meta = {'_id': k}
+            meta = {'id': k}
             outq = mapf_ctx.call('map_wrapper', d, meta, outq)
         if 'key' in kw:
             outq = filter(lambda x: cmp(x[0], kw['key'])==0, outq)
