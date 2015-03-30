@@ -62,7 +62,6 @@ class RefField(Field):
     def __set__(self, instance, value):
         # we will override this completely to enable late binding/loading of
         # ref'd objects
-        print "assigning to ref value=", value
         field_name = self._get_fieldname(instance)
         if isinstance(value, basestring):
             # assume id
