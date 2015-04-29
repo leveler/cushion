@@ -140,7 +140,7 @@ class ByteField(Field):
     """
 
     def _byte_loader(self, instr):
-        return b64decode(instr)
+        return b64decode(instr) if instr else ''
 
     def __init__(self, **kw):
         super(ByteField, self).__init__(loader=self._byte_loader, **kw)

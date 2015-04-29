@@ -58,6 +58,9 @@ class TestField(unittest.TestCase):
         s.save()
         s0 = Something.load(s.id)
         assert s0.pic == s.pic
+        # can't assign None?
+        s.pic = None
+        s.save()
 
     def test_boolean_field(self):
         s = Something()
