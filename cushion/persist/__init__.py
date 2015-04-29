@@ -4,6 +4,7 @@ from textwrap import dedent
 from uuid import uuid4
 
 from .base import BaseConnection
+from .exceptions import InvalidConnectionType
 
 
 ActiveConnection = None
