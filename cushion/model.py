@@ -58,7 +58,8 @@ class Model(object):
         self._raw_data = {}
         if 'type' in kw:
             # cleanup 'type' inbound
-            if kw['type'] != self.type: raise DocTypeMismatch()
+            if kw['type'] != self.type: raise DocTypeMismatch(
+                'incorrect doc type for object: {}'.format(kw.get('_id', '')) )
             del kw['type']
         if '_id' in kw:
             # existing model
