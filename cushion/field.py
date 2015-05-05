@@ -124,6 +124,20 @@ class RefField(Field):
         return val.id
 
 
+class OptionField(Field):
+
+    def __verify_choice(self, ch):
+        if ch not in self.__choices:
+            raise ValueError('Invalid choice.')
+        return unicode(ch)
+
+    def __init__(self, default=None, choices=None):
+        self.__choices = choices or []
+        super(OptionField, self).__init__(
+            loader=self.__verify_choice,
+            default=default )
+
+
 class TextField(Field):
 
     def __init__(self, default=None):

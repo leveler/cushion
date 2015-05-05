@@ -7,7 +7,7 @@ import execjs
 from ..cushion.model import Model, DocTypeMismatch, DocTypeNotFound
 from ..cushion.field import (
     Field, BooleanField, TextField, IntegerField, FloatField, RefField,
-    DateTimeField, ListField, DictField, ByteField
+    DateTimeField, ListField, DictField, ByteField, OptionField
     )
 
 from ..cushion.persist import set_connection
@@ -29,6 +29,7 @@ class Something(Model):
     b = BooleanField()
     default_true = BooleanField(default=True)
     pic = ByteField()
+    oo = OptionField(choices=['XYZ', 'ABC'])
 
 
 class ModelWithNaiveDateTime(Model):
@@ -70,6 +71,14 @@ class TestField(unittest.TestCase):
         s0 = Something.load(s.id)
         assert s0.b, "why not true?"
         assert s0.default_true, "default true was not true"
+
+    def test_option_field(self):
+        s = Something()
+        # can assign a valid option
+        s.oo = 'XYZ'
+        s.save()
+        with self.assertRaises(ValueError):
+            s.oo = 'feh'
 
     def test_integer_field(self):
         ss = Something(i=99)
