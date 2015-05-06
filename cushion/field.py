@@ -137,6 +137,11 @@ class OptionField(Field):
             loader=self.__verify_choice,
             default=default )
 
+    @property
+    def choices(self):
+        """ returns copy of the choices for this field. """
+        return self.__choices[:]
+
 
 class TextField(Field):
 

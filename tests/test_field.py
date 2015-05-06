@@ -77,6 +77,7 @@ class TestField(unittest.TestCase):
         # can assign a valid option
         s.oo = 'XYZ'
         s.save()
+        assert len(Something.oo.choices) == 2
         with self.assertRaises(ValueError):
             s.oo = 'feh'
 
