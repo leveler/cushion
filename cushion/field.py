@@ -127,7 +127,7 @@ class RefField(Field):
 class OptionField(Field):
 
     def __verify_choice(self, ch):
-        if ch not in self.__choices:
+        if ch is not None and ch not in self.__choices:
             raise ValueError('Invalid choice.')
         return unicode(ch)
 
