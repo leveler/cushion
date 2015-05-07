@@ -128,7 +128,8 @@ class OptionField(Field):
 
     def __verify_choice(self, ch):
         if ch is not None and ch not in self.__choices:
-            raise ValueError('Invalid choice. choice: {}'.format(ch))
+            raise ValueError('Invalid choice. choice: {} of type: {}'.format(
+                ch, type(ch) ))
         return unicode(ch)
 
     def __init__(self, default=None, choices=None):
