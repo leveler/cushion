@@ -124,6 +124,21 @@ but a callable.  The function will be executed when the value is accessed the
 first time.
 
 
+### Option Field
+_asdf
+
+It's often useful to limit the input on a field to a certain subset.
+
+```
+class Shoe(Model):
+    color = OptionField(choices=['red', 'blue', 'black'], null_ok=False)
+    lacetype = OptionField(choices=['leather', 'rope'])
+```
+
+Notice the `null_ok` above.  By default this is True and allows the choice
+field to have nothing assigned to it.
+
+
 ## reference fields
 
 You can also reference another `Model` using a `RefField`.
