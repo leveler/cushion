@@ -127,13 +127,15 @@ class RefField(Field):
 class OptionField(Field):
 
     def __verify_choice(self, ch):
-        if ch is not None and ch not in self.__choices:
+        nullok_violated = self.__null_ok or not ch
+        if not nullok_violated and ch not in self.__choices:
             raise ValueError('Invalid choice. choice: {} of type: {}'.format(
                 ch, type(ch) ))
         return unicode(ch)
 
-    def __init__(self, default=None, choices=None):
+    def __init__(self, default=None, choices=None, null_ok=True):
         self.__choices = choices or []
+        self.__null_ok = null_ok
         super(OptionField, self).__init__(
             loader=self.__verify_choice,
             default=default )
