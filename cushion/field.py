@@ -128,7 +128,7 @@ class OptionField(Field):
 
     def __verify_choice(self, ch):
         nullok_violated = self.__null_ok or not ch
-        if not nullok_violated and ch not in self.__choices:
+        if not nullok_violated or (ch and ch not in self.__choices):
             raise ValueError('Invalid choice. choice: {} of type: {}'.format(
                 ch, type(ch) ))
         return unicode(ch)
