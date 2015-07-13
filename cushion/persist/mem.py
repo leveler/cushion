@@ -97,6 +97,8 @@ class MemConnection(BaseConnection):
             if include_docs:
                 r_.doc = MemDoc(k[2], self.data[k[2]])
             results.append(r_)
+        if 'skip' in kw:
+            results = results[kw['skip']:]
         if 'limit' in kw:
             results = results[:kw['limit']]
         return MemResultSet(results, include_docs)
