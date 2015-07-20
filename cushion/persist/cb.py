@@ -12,12 +12,13 @@ from .exceptions import PersistenceError
 class CouchbaseConnection(BaseConnection):
     """ connects to a couchbase server """
 
-    def __init__(self, bucket, host=None, password=None, writeout=None):
+    def __init__(self, bucket, host=None, password=None, writeout=None, **opt):
         """
         writeout => if provided, a file handle to save out the raw commands
             passed to python couchbase. useful for debugging
         """
-        self._cb = Couchbase.connect(bucket, host=host, password=password)
+        self._cb = Couchbase.connect(
+            bucket, host=host, password=password, **opt )
         self._wout = writeout
 
     def get(self, key):
