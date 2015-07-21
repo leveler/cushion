@@ -7,8 +7,6 @@ from ..cushion.persist.mem import MemConnection
 
 
 
-mc = MemConnection()
-set_connection(mc)
 
 
 class NoTypeModel(Model):
@@ -28,6 +26,9 @@ class FakeModel(Model):
 
 
 class TestModel(unittest.TestCase):
+
+    def setUp(self):
+        set_connection(MemConnection())
 
     def test_no_type(self):
         notype = NoTypeModel()

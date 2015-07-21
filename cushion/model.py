@@ -128,5 +128,3 @@ class Model(object):
         return views
 
 
-
-

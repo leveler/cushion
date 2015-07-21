@@ -10,10 +10,6 @@ from ..cushion.persist.mem import MemConnection
 from ..cushion.view import View, sync_all
 
 
-mc = MemConnection()
-set_connection(mc)
-
-
 class Boogie(Model):
     n = TextField()
     i = IntegerField(default=37)
@@ -61,6 +57,7 @@ class Outter(Model):
 class TestField(unittest.TestCase):
 
     def setUp(self):
+        set_connection(MemConnection())
         sync_all(Boogie.viewlist())
         clean_out_db_docs()
 

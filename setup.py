@@ -15,11 +15,11 @@ from distutils.core import setup
 
 setup(
     name='cushion',
-    version='0.5.1',
+    version='1.0.0',
     description='Simple Couchbase object wrapper',
     author='Jeremy Kelley',
     author_email='jeremy@33ad.org',
     url="http://github.com/leveler/cushion/",
     license="http://www.apache.org/licenses/LICENSE-2.0",
-    install_requires=['iso8601', 'couchbase==1.2.5']
+    install_requires=['iso8601', 'couchbase==2.0.2']
 )

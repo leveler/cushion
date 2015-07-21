@@ -14,8 +14,6 @@ from ..cushion.persist import set_connection
 from ..cushion.persist.mem import MemConnection
 
 
-set_connection(MemConnection())
-
 
 class Something(Model):
     twentythree = Field(default=23, loader=int)
@@ -41,6 +39,9 @@ class Outter(Model):
 
 
 class TestField(unittest.TestCase):
+
+    def setUp(self):
+        set_connection(MemConnection())
 
     def test_no_type(self):
         notype = Something()

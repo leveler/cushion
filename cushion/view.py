@@ -27,7 +27,7 @@ class View(object):
         if not result: return ret
         wr_ = wrapper or self._wrapper
         for r in result:
-            if wr_ and result.include_docs:
+            if wr_ and kw.get('include_docs', False):
                 docd = r.doc.value
                 if '_id' not in docd:
                     docd['_id'] = r.doc.key
