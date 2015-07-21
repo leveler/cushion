@@ -27,7 +27,7 @@ class CouchbaseConnection(BaseConnection):
         if key is None:
             key = uuid4().hex
             if isinstance(value, dict) and 'type' in value:
-                key = '{}_{}'.format(value['type'], key)
+                key = '{}:{}'.format(value['type'], key)
         encoded_val = dumps(value)
         result = self._cb.upsert(key, value, persist_to=1)
         if result.success:
